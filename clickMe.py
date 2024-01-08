@@ -12,7 +12,7 @@ MONTH_DICT = {
 
 def main():
 
-    print("\nParsing data...\n")
+    print("\nParsing data... Takes up to 5 minutes.\n")
 
     startFromHere = "/Users/claudio/Desktop/CS_Projects/Automated_Invoice/StartFromHere.xlsx"
     id, month, year, invDate = getDateAndID(startFromHere)
