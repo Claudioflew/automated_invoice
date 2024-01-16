@@ -2,6 +2,14 @@ import ezsheets
 import re
 
 def parseData(id, month, year):
+    """
+    parseData parses all the invoicing data from the Google Sheet.
+
+    :param id: string - id of the Google Sheet to be parsed
+    :param month: int - invoicing month
+    :param year: int - invoicing year
+    :return: dictionary of base information of clients, dictionary of all the invoicing entries
+    """
     ss = ezsheets.Spreadsheet(id)
 
     rateDictDict = makeRateDictDict(ss)
@@ -64,6 +72,13 @@ def parseData(id, month, year):
     return baseInfoDict, dataDict
 
 def makeACDict(ss, datePat):
+    """
+    makeACDict makes a dictionaries of all the clients to be invoiced.
+
+    :param ss: all SpreadSheets objects in the Google Sheets
+    :param datePat: string - regex to match the invoicing month
+    :return: dictionary whose key is active clients to be invoiced and whose value is the starting row number to be invoiced
+    """
     ACDict = {}
     for sheet in ss:
         for rowNum, cell in enumerate(sheet.getColumn(1), 1): # Check until the very end of sheet
@@ -74,6 +89,12 @@ def makeACDict(ss, datePat):
     return ACDict
 
 def makeBaseInfoList(sheet):
+    """
+    makeBaseInfoList makes a list containing client's name, address, and invoice matter.
+
+    :param sheet: each Google sheet object
+    :return: list containing name, address (multiple items), and invoice matter (last index).
+    """
     tempStr = sheet["C2"] # Cell C2 must be Name(newline)Address1(newline)Address2
     baseInfoList = tempStr.split("\n")
 

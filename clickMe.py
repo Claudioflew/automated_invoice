@@ -36,6 +36,12 @@ def main():
     
 
 def getDateAndID(startFromHere):
+    """
+    getDateAndID loads an excel file and extracts an id of the sheet and date invoices will be issued on.
+
+    :param startFromHere: string - absolute path of the excel file
+    :return: valid id: int, month: int, year: int, invoicing date: string
+    """
     wb = openpyxl.load_workbook(startFromHere)
     sheet = wb.active
 
