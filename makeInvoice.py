@@ -4,10 +4,23 @@ from openpyxl import drawing
 from openpyxl.styles import PatternFill
 
 def makeFile(templatePath, outputPath):
+    """
+    makeFile makes an Excel book which copies the template excel file
+
+    :param templatePath: string - absolute path of the template excel file
+    :param outputPath: string - new Excel book
+    :return: void
+    """
     workbook = openpyxl.load_workbook(templatePath)
     workbook.save(outputPath)
 
 def pasteLogo(sheet):
+    """
+    pasteLogo is a void function which pastes the logo at the top of the invoice
+
+    :param sheet: Excel Sheet Object
+    :return: void
+    """
     # Make image object
     logo = drawing.image.Image("/Users/claudio/Desktop/CS_Projects/Automated_Invoice/lorhLogo.png")
     logo.width = 850
@@ -16,6 +29,13 @@ def pasteLogo(sheet):
 
 
 def fillBaseInfo(sheet, baseInfoList):
+    """
+    fillBaseInfo simply fills data in upper side of the invoice
+
+    :param sheet: Excel sheet object
+    :param baseInfoList: list - containing client data (name, address and invoice matter)
+    :return: void
+    """
     # Matter is stored in the last and fill in cell C8
     matterStr = baseInfoList.pop()
     sheet.cell(row=8, column=3, value=matterStr)
@@ -24,6 +44,13 @@ def fillBaseInfo(sheet, baseInfoList):
         sheet.cell(row=rowNum, column=5, value=value)
 
 def findEndRow(sheet, rowNum):
+    """
+    findEndRow finds a row number which is not empty
+
+    :param sheet: Sheet Object
+    :param rowNum: int - from which row to start (this is the end of the entry of the work activities)
+    :return: int - row number
+    """
     columnB = sheet.iter_cols(min_col=2, max_col=2, # Only qualify column B
                               min_row=rowNum, values_only=True)
     
@@ -36,6 +63,13 @@ def findEndRow(sheet, rowNum):
     return None
 
 def fillFormula(sheet, rowNum):
+    """
+    fillFormula is a void function which fills some Excel formulas in cells
+
+    :param sheet: Sheet Object to be filled formula
+    :param rowNum: int - from which row the formula should be filled
+    :return: void
+    """
     # Managing Attorney HOURS and AMOUNT
     sheet[f"D{rowNum}"] = f"=SUMIF(E15:E{rowNum-1}, \">=485\", D15:D{rowNum-1})"
     sheet[f"F{rowNum}"] = f"=SUMIF(E15:E{rowNum-1}, \">=485\", F15:F{rowNum-1})"
@@ -59,6 +93,15 @@ def fillFormula(sheet, rowNum):
     sheet[f"F{rowNum+16}"] = f"=SUM(F{rowNum+4}, F{rowNum+7}:F{rowNum+8}, F{rowNum+11}:F{rowNum+12})"
 
 def makeInvoice(outputPath, baseInfoDict, dataDict, invDate):
+    """
+    makeInvoice makes invoice sheets as an Excel file.
+
+    :param outputPath: string - absolute path for the Excel file
+    :param baseInfoDict: dictionary - containing base information of each client
+    :param dataDict: dictionary - containing invoicing data (date, work, rate and time)
+    :param invDate: string - invoice issuing date
+    :return: void
+    """
     workbook = load_workbook(outputPath)
     templateSheet = workbook.active
 
@@ -103,6 +146,5 @@ def makeInvoice(outputPath, baseInfoDict, dataDict, invDate):
              newSheet.delete_rows(rowNum)
 
         fillFormula(newSheet, rowNum)
-
 
     workbook.save(outputPath)

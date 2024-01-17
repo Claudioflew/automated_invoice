@@ -104,6 +104,12 @@ def makeBaseInfoList(sheet):
     return baseInfoList
 
 def makeRateDictDict(ss):
+    """
+    makeRateDictDict makes a dictionary - key: rate variation name, value: dictionary of each professional's rate
+
+    :param ss: Google Sheets objects
+    :return: a dictionary of a dictionary
+    """
     for sheet in ss:
         sheetName = sheet.title
         sheetName.replace(" ", "")
